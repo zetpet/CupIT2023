@@ -1,6 +1,8 @@
 # Cup IT 2023 
 ## Ранжирование комментариев с помощью ML 
-![Пасхалка](https://user-images.githubusercontent.com/115157179/226173708-39a4a6ca-098c-4c30-a032-a3dd056ab4cb.png)
+<div id="header" align="left">
+  <img src="https://media.giphy.com/media/1o6rpNIRjOgR9eR1Wj/giphy.gif" width="100"/>
+</div>
 
 ## Состав команды:
 - Наумовская Анастасия
