@@ -1,57 +1,52 @@
 # Cup IT 2023 
-## Ранжирование комментариев с помощью ML 
+## Ranking Comments Using ML 
 <div id="header" align="left">
   <img src="https://media.giphy.com/media/1o6rpNIRjOgR9eR1Wj/giphy.gif" width="100"/>
 </div>
 
-## Состав команды:
-- Наумовская Анастасия
-- Абабков Роман
-- Николаев Иван
-- Староверов Максим
-- Габитов Тимур
+## Team Members:
+- Anastasia Naumovskaya
+- Roman Ababkov
+- Ivan Nikolaev
+- Maxim Staroverov
+- Timur Gabitov
 
-## Постановка задачи
-Предложите механизм сортировки комментариев к постам по их популярности на основе методов 
-машинного обучения, чтобы модель могла как можно лучше ранжировать пользовательские комментарии
+## Problem Statement
+Propose a mechanism for sorting comments on posts based on their popularity using machine learning methods, so that the model can rank user comments as accurately as possible.
 
-- Проведите проверку и разведочный анализ данных (EDA) и подумайте, какие готовые решения можно 
-использовать для представления текста.
-- Используя тренировочную и тестовую выборки датасета, обучите модель ранжировать текстовые комментарии в порядке их популярности (от популярных к менее популярным) и проведите валидацию 
-своей модели. Выбор модели необходимо аргументировать, основываясь на результатах обучения.
-- Проанализируйте полученные результаты и сформулируйте полезные инсайты о том, что обычно содержит популярный комментарий, чтобы команда VK могла использовать эту информацию для улучшения комментариев своих пользователей.
-- Предложите методы взаимодействия с комментаторами, а также механизмы поддержки для разных 
-групп пользователей, включая тех, чьи комментарии непопулярны. 
+- Perform data verification and exploratory data analysis (EDA) and consider ready-made solutions for representing text.
+- Train the model using the training and testing samples of the dataset to rank textual comments in order of their popularity (from most popular to least popular), and validate the model. The model selection should be justified based on the training results.
+- Analyze the obtained results and formulate useful insights about what typically constitutes a popular comment, so that the VK team can use this information to improve user comments.
+- Propose methods of interaction with commentators, as well as support mechanisms for different user groups, including those whose comments are unpopular. 
 
-## Структура решения
+## Solution Structure
 
 - **New_features_from_df**
-> Выделяем новые фичи на основе комментариев и текстов постов,
-> анализируем влияние сгенерированных фичей на score
+> Extract new features based on comments and post texts, analyze the impact of generated features on the score.
 
-> Фичи для комментариев: len_with_spaces (длина комментариев, деленная по пробелам), links (индикатор содержания ссылки), emoji (индикатор содержания спецсимволов &#x), money (индикатор содержания знака $), quotes (индикатор содержания цитирования), col_sentence (количество предложений), tokenized (выделение токенизированных слов), col_words (количество слов), punc_count (количество знаков препинания), avg_len_words (средняя длина слов), total_digits (общее количество цифр), total_letters (общее количество букв)
+> Comment features: len_with_spaces (comment length divided by spaces), links (indicator of containing links), emoji (indicator of containing special characters &#x), money (indicator of containing the $ sign), quotes (indicator of containing quotes), col_sentence (number of sentences), tokenized (tokenized words), col_words (number of words), punc_count (number of punctuation marks), avg_len_words (average word length), total_digits (total number of digits), total_letters (total number of letters)
 
-> Фичи для текста: len_with_spaces (длина комментариев, деленная по пробелам), links (индикатор содержания ссылки), emoji_pic (количество эмодзи, содержащиеся в тексте), money (индикатор содержания знака $), quotes (индикатор содержания цитирования), col_sentence (количество предложений), col_words (количество слов), punc_count (количество знаков препинания), avg_len_words (средняя длина слов), total_digits (общее количество цифр), total_letters (общее количество букв)
+> Text features: len_with_spaces (text length divided by spaces), links (indicator of containing links), emoji_pic (number of emojis contained in the text), money (indicator of containing the $ sign), quotes (indicator of containing quotes), col_sentence (number of sentences), col_words (number of words), punc_count (number of punctuation marks), avg_len_words (average word length), total_digits (total number of digits), total_letters (total number of letters)
 - **EDA_features**
-> Общий анализ фич из текста и комментария, выделения инсайтов
+> General analysis of features from text and comments, extraction of insights
 - **BERT**
-> Выборка одного батча данных (1000), удаление спецсимволов, стопслов, нормализация. Обучение предобученной нейронной сети для векторизации признаков. Классификация с помощью различных методов
+> Selection of one batch of data (1000), removal of special characters, stop words, normalization. Training a pre-trained neural network to vectorize features. Classification using various methods.
 - **CountVectorizer()**
-> Векторизуем данные с помощью CountVectorizer() и одновременно с его же помощью удаляем стопслова, нормализуем и разбиваем на токены. Используем MultinomialNB для классификации, либо после применяем TFIDF-трансформер и классифицируем с помощью MultinomialNB
+> Vectorize data using CountVectorizer() while removing stop words, normalizing, and tokenizing. Use MultinomialNB for classification or apply TFIDF transformer and classify using MultinomialNB.
 - **TFIDF**
-> Удаление спецсимволов, стопслов, нормализация. Векторизуем предложения с помощью TFIDFVectorizer и с помощью различных классификатор оцениваем score
+> Remove special characters, stop words, normalization. Vectorize sentences using TFIDFVectorizer and evaluate score using various classifiers.
 - **ranking_test_solution.jsonl**
-> Заполненный score на тестовой выборке
-- **Презентация решения**
+> Filled score on the test dataset
+- **Solution Presentation**
 
-### Общий вывод
+### General Conclusion
 
-В датасете присутствует большое количество данных, из-за чего возникает сложность в обработке и дальнейшем масштабировании модели. Данные методы были выбраны на основе того, что они чаще всего используются в индустрии, а значит их сочетание может привести к неплохоим результатам.
-Наилучший результат показало сочетание выделение Фичей из комментариев + KNN, поэтому на этом методе и обрабатывался test.  
-На основе предобученной модели обработки естeственного языка Bert + KNN классификатора можно было получить высокий score, однако данная модель не подходит для масштабирования.
+The dataset contains a large amount of data, which makes it challenging to process and scale the model further. The selected methods are based on their common usage in the industry, and their combination can lead to good results.
+The best result was achieved with a combination of extracting features from comments + KNN, which was used to process the test dataset.
+Using a pre-trained natural language processing model, Bert + KNN classifier, a high score could be achieved, but this model is not suitable for scaling.
 
-Также были предложены инициативы для внедрения системы ранжирования комментариев ВКонтакте:
-- Предварительный рейтинг в поисковой строке для еще не опубликованного комментария
-- Создание отдельного сервиса для комментаторов
+Initiatives for implementing the comments ranking system on VKontakte were also proposed:
+- Pre-rating in the search bar for comments not yet published
+- Creation of a separate service for commentators
 
 **NLP Hell Yeah!**
